@@ -2,9 +2,9 @@
 package Poised.Utils.Database.Tables;
 
 //Imports
-import Poised.Utils.Database.Database_Manager;
-import Poised.Utils.Database.Tables.Properties.Address_Properties;
-import Poised.Utils.Dialogue.Components.Form_Field;
+import Poised.Utils.Database.DatabaseManager;
+import Poised.Utils.Database.Tables.Properties.AddressProperties;
+import Poised.Utils.Dialogue.Components.FormField;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,7 +64,7 @@ public class Address {
     public String toString(boolean minimal) {
 
         //Get the Property Names
-        ArrayList<Address_Properties> propertyNames = getProperties();
+        ArrayList<AddressProperties> propertyNames = getProperties();
 
         //Get the Property Values
         ArrayList<String> propertyValues = this.getValues();
@@ -100,13 +100,13 @@ public class Address {
      *
      * @return An ArrayList of Properties for this Table.
      */
-    public static ArrayList<Address_Properties> getProperties() {
+    public static ArrayList<AddressProperties> getProperties() {
 
         //Setup the Properties String Array
-        ArrayList<Address_Properties> properties = new ArrayList<>();
+        ArrayList<AddressProperties> properties = new ArrayList<>();
 
         //Add the Required Properties
-        properties.addAll(Arrays.stream(Address_Properties.values()).toList());
+        properties.addAll(Arrays.stream(AddressProperties.values()).toList());
 
         //Return the Properties
         return properties;
@@ -140,18 +140,18 @@ public class Address {
      * @param databaseManager The Database Manager that will Handle all the database Interactions.
      * @return A Map Containing the Table's Properties as Keys and Filled Form Fields as the Corresponding Values.
      */
-    public HashMap<Address_Properties, Form_Field> getFilledFormFields(Database_Manager databaseManager) {
+    public HashMap<AddressProperties, FormField> getFilledFormFields(DatabaseManager databaseManager) {
 
         //Get the List of Form Fields
-        HashMap<Address_Properties, Form_Field> formFields = getFormFields(databaseManager);
+        HashMap<AddressProperties, FormField> formFields = getFormFields(databaseManager);
 
         //Get the Input Fields for the Properties
-        JTextField idInputField = ((JTextField) formFields.get(Address_Properties.id).fieldInput());
-        JTextField streetNumberInputField = ((JTextField) formFields.get(Address_Properties.Street_Number).fieldInput());
-        JTextField streetNameInputField = ((JTextField) formFields.get(Address_Properties.Street_Name).fieldInput());
-        JTextField cityInputField = ((JTextField) formFields.get(Address_Properties.City).fieldInput());
-        JTextField regionInputField = ((JTextField) formFields.get(Address_Properties.Region).fieldInput());
-        JTextField postalCodeInputField = ((JTextField) formFields.get(Address_Properties.Postal_Code).fieldInput());
+        JTextField idInputField = ((JTextField) formFields.get(AddressProperties.id).fieldInput());
+        JTextField streetNumberInputField = ((JTextField) formFields.get(AddressProperties.Street_Number).fieldInput());
+        JTextField streetNameInputField = ((JTextField) formFields.get(AddressProperties.Street_Name).fieldInput());
+        JTextField cityInputField = ((JTextField) formFields.get(AddressProperties.City).fieldInput());
+        JTextField regionInputField = ((JTextField) formFields.get(AddressProperties.Region).fieldInput());
+        JTextField postalCodeInputField = ((JTextField) formFields.get(AddressProperties.Postal_Code).fieldInput());
 
         //Update the Input Fields
         idInputField.setText(Integer.toString(this.id));
@@ -171,16 +171,16 @@ public class Address {
      * @param databaseManager The Database Manager that will Handle all the database Interactions.
      * @return A Map Containing the Table's Properties as Keys and Form Fields as the Corresponding Values.
      */
-    public static HashMap<Address_Properties, Form_Field> getFormFields(Database_Manager databaseManager) {
+    public static HashMap<AddressProperties, FormField> getFormFields(DatabaseManager databaseManager) {
 
         //Setup the List of Form Fields
-        HashMap<Address_Properties, Form_Field> formFields = new HashMap<>();
+        HashMap<AddressProperties, FormField> formFields = new HashMap<>();
 
         //Get the List of Properties
-        ArrayList<Address_Properties> propertyList = getProperties();
+        ArrayList<AddressProperties> propertyList = getProperties();
 
         //Loop through the Requested Properties
-        for (Address_Properties currentProperty : propertyList) {
+        for (AddressProperties currentProperty : propertyList) {
 
             //Setup the Input Field's Label
             JLabel inputFieldLabel = new JLabel(currentProperty.name());
@@ -189,7 +189,7 @@ public class Address {
             JComponent inputField = new JTextField(10);
 
             //Setup the New Form Field
-            Form_Field newFormField = new Form_Field(inputFieldLabel, inputField);
+            FormField newFormField = new FormField(inputFieldLabel, inputField);
 
             //Add the New Form Field to the Form Fields List
             formFields.put(currentProperty, newFormField);

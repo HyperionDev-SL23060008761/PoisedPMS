@@ -2,10 +2,10 @@
 package Poised.Utils.Database.Utils;
 
 //Imports
-import Poised.Utils.Database.Database_Manager;
-import Poised.Utils.Database.Tables.Personal_Details;
-import Poised.Utils.Database.Tables.Properties.Role_Properties;
-import Poised.Utils.Dialogue.Components.Form_Field;
+import Poised.Utils.Database.DatabaseManager;
+import Poised.Utils.Database.Tables.PersonalDetails;
+import Poised.Utils.Database.Tables.Properties.RoleProperties;
+import Poised.Utils.Dialogue.Components.FormField;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +18,7 @@ public class Role {
 
     //Setup the Public Properties
     public int id;
-    public Personal_Details personalDetails;
+    public PersonalDetails personalDetails;
 
     /**
      * Constructor for Role.
@@ -26,7 +26,7 @@ public class Role {
      * @param id              The ID for the item in the Database (Null if a Blank Object is Needed).
      * @param personalDetails The Personal Details for this Human.
      */
-    public Role(Integer id, Personal_Details personalDetails) {
+    public Role(Integer id, PersonalDetails personalDetails) {
 
         //Update the Public Properties
         this.id = id == null ? -1 : id;
@@ -53,7 +53,7 @@ public class Role {
     public String toString(boolean minimal) {
 
         //Get the Property Names
-        ArrayList<Role_Properties> propertyNames = getProperties();
+        ArrayList<RoleProperties> propertyNames = getProperties();
 
         //Get the Property Values
         ArrayList<String> propertyValues = this.getFormattedValues(minimal);
@@ -89,13 +89,13 @@ public class Role {
      *
      * @return An ArrayList of Properties for this Table.
      */
-    public static ArrayList<Role_Properties> getProperties() {
+    public static ArrayList<RoleProperties> getProperties() {
 
         //Setup the Properties String Array
-        ArrayList<Role_Properties> properties = new ArrayList<>();
+        ArrayList<RoleProperties> properties = new ArrayList<>();
 
         //Add the Required Properties
-        properties.addAll(Arrays.stream(Role_Properties.values()).toList());
+        properties.addAll(Arrays.stream(RoleProperties.values()).toList());
 
         //Return the Properties
         return properties;
@@ -149,15 +149,15 @@ public class Role {
      * @param databaseManager The Database Manager that will Handle all the database Interactions.
      * @return A Map Containing the Table's Properties as Keys and Filled Form Fields as the Corresponding Values.
      */
-    public HashMap<Role_Properties, Form_Field> getFilledFormFields(Database_Manager databaseManager) {
+    public HashMap<RoleProperties, FormField> getFilledFormFields(DatabaseManager databaseManager) {
 
         //Get the List of Form Fields
-        HashMap<Role_Properties, Form_Field> formFields = getFormFields(databaseManager);
+        HashMap<RoleProperties, FormField> formFields = getFormFields(databaseManager);
 
         //Get the Input Fields for the Properties
-        JTextField idInputField = ((JTextField) formFields.get(Role_Properties.id).fieldInput());
-        JComboBox<Personal_Details> personalDetailsInputField =
-                ((JComboBox<Personal_Details>) formFields.get(Role_Properties.Personal_Details).fieldInput());
+        JTextField idInputField = ((JTextField) formFields.get(RoleProperties.id).fieldInput());
+        JComboBox<PersonalDetails> personalDetailsInputField =
+                ((JComboBox<PersonalDetails>) formFields.get(RoleProperties.Personal_Details).fieldInput());
 
         //Update the Input Fields
         idInputField.setText(Integer.toString(this.id));
@@ -173,23 +173,23 @@ public class Role {
      * @param databaseManager The Database Manager that will Handle all the database Interactions.
      * @return A Map Containing the Table's Properties as Keys and Form Fields as the Corresponding Values.
      */
-    public static HashMap<Role_Properties, Form_Field> getFormFields(Database_Manager databaseManager) {
+    public static HashMap<RoleProperties, FormField> getFormFields(DatabaseManager databaseManager) {
 
         //Setup the List of Form Fields
-        HashMap<Role_Properties, Form_Field> formFields = new HashMap<>();
+        HashMap<RoleProperties, FormField> formFields = new HashMap<>();
 
         //Get the List of Properties
-        ArrayList<Role_Properties> propertyList = getProperties();
+        ArrayList<RoleProperties> propertyList = getProperties();
 
         //Get the List of Personal Details
-        Personal_Details[] personalDetailsList =
-                databaseManager.personalDetailsTable.getAll().toArray(Personal_Details[]::new);
+        PersonalDetails[] personalDetailsList =
+                databaseManager.personalDetailsTable.getAll().toArray(PersonalDetails[]::new);
 
         //Setup the Personal Details Select Box
-        JComboBox<Personal_Details> personalDetailsSelectBox = new JComboBox<>(personalDetailsList);
+        JComboBox<PersonalDetails> personalDetailsSelectBox = new JComboBox<>(personalDetailsList);
 
         //Loop through the Requested Properties
-        for (Role_Properties currentProperty : propertyList) {
+        for (RoleProperties currentProperty : propertyList) {
 
             //Setup the Input Field's Label
             JLabel inputFieldLabel = new JLabel(currentProperty.name(), SwingConstants.LEFT);
@@ -198,10 +198,10 @@ public class Role {
             JComponent inputField = new JTextField(10);
 
             //Check if the Current Property is the Personal Details Select Box and update the Input Field
-            if(currentProperty.equals(Role_Properties.Personal_Details)) inputField = personalDetailsSelectBox;
+            if(currentProperty.equals(RoleProperties.Personal_Details)) inputField = personalDetailsSelectBox;
 
             //Setup the New Form Field
-            Form_Field newFormField = new Form_Field(inputFieldLabel, inputField);
+            FormField newFormField = new FormField(inputFieldLabel, inputField);
 
             //Add the New Form Field to the Form Fields List
             formFields.put(currentProperty, newFormField);

@@ -2,10 +2,10 @@
 package Poised.Utils.Database.Tables;
 
 //Imports
-import Poised.Utils.Database.Database_Manager;
-import Poised.Utils.Database.Tables.Properties.Project_Properties;
-import Poised.Utils.Dialogue.Components.Date_Input;
-import Poised.Utils.Dialogue.Components.Form_Field;
+import Poised.Utils.Database.DatabaseManager;
+import Poised.Utils.Database.Tables.Properties.ProjectProperties;
+import Poised.Utils.Dialogue.Components.DateInput;
+import Poised.Utils.Dialogue.Components.FormField;
 import javax.swing.*;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -20,13 +20,13 @@ public class Project {
     //Setup the Public Properties
     public String projectNumber;
     public String name;
-    public Building building;
+    public BuildingType buildingType;
     public int erfNumber;
     public Address address;
     public double totalPrice;
     public double totalPaid;
-    public Project_Manager projectManager;
-    public Structural_Engineer structuralEngineer;
+    public ProjectManager projectManager;
+    public StructuralEngineer structuralEngineer;
     public Architect architect;
     public Contractor contractor;
     public Customer customer;
@@ -39,7 +39,7 @@ public class Project {
      *
      * @param projectNumber      The Project's Number (Acts as an Identifier).
      * @param name               The Name of the Project.
-     * @param building           The Building Type of this Project.
+     * @param buildingType       The Building Type of this Project.
      * @param erfNumber          The ERF Number used to ensure the Address is Correct.
      * @param address            The Address Where the Project is Located At.
      * @param totalPrice         The Total Price of the Project.
@@ -56,13 +56,13 @@ public class Project {
     public Project(
             String projectNumber,
             String name,
-            Building building,
+            BuildingType buildingType,
             int erfNumber,
             Address address,
             double totalPrice,
             double totalPaid,
-            Project_Manager projectManager,
-            Structural_Engineer structuralEngineer,
+            ProjectManager projectManager,
+            StructuralEngineer structuralEngineer,
             Architect architect,
             Contractor contractor,
             Customer customer,
@@ -74,7 +74,7 @@ public class Project {
         //Update the Public Properties
         this.projectNumber = projectNumber;
         this.name = name;
-        this.building = building;
+        this.buildingType = buildingType;
         this.erfNumber = erfNumber;
         this.address = address;
         this.totalPrice = totalPrice;
@@ -109,7 +109,7 @@ public class Project {
     public String toString(boolean minimal) {
 
         //Get the Property Names
-        ArrayList<Project_Properties> propertyNames = getProperties();
+        ArrayList<ProjectProperties> propertyNames = getProperties();
 
         //Get the Property Values
         ArrayList<String> propertyValues = this.getFormattedValues();
@@ -118,19 +118,19 @@ public class Project {
         StringBuilder dataString = new StringBuilder();
 
         //Setup the List of Minimal Properties List
-        ArrayList<Project_Properties> minimalProperties = new ArrayList<>();
+        ArrayList<ProjectProperties> minimalProperties = new ArrayList<>();
 
         //Add the Minimal Properties to the Minimal Properties List
-        minimalProperties.add(Project_Properties.Project_Number);
-        minimalProperties.add(Project_Properties.Name);
-        minimalProperties.add(Project_Properties.ERF_Number);
+        minimalProperties.add(ProjectProperties.Project_Number);
+        minimalProperties.add(ProjectProperties.Name);
+        minimalProperties.add(ProjectProperties.ERF_Number);
 
 
         //Loop through the Property Names
         for (int i = 0; i < propertyNames.size(); i++) {
 
             //Get the Current Property
-            Project_Properties currentProperty = propertyNames.get(i);
+            ProjectProperties currentProperty = propertyNames.get(i);
 
             //Check if the Current Property is a non-minimal property and only minimal properties should be shown
             if(minimal && !minimalProperties.contains(currentProperty)) continue;
@@ -160,13 +160,13 @@ public class Project {
      *
      * @return An ArrayList of Properties for this Table.
      */
-    public static ArrayList<Project_Properties> getProperties() {
+    public static ArrayList<ProjectProperties> getProperties() {
 
         //Setup the Properties String Array
-        ArrayList<Project_Properties> properties = new ArrayList<>();
+        ArrayList<ProjectProperties> properties = new ArrayList<>();
 
         //Add the Required Properties
-        properties.addAll(Arrays.stream(Project_Properties.values()).toList());
+        properties.addAll(Arrays.stream(ProjectProperties.values()).toList());
 
         //Return the Properties
         return properties;
@@ -185,7 +185,7 @@ public class Project {
         //Add the Required Values
         values.add(String.format("'%s'", this.projectNumber));
         values.add(String.format("'%s'", this.name));
-        values.add(Integer.toString(this.building.id));
+        values.add(Integer.toString(this.buildingType.id));
         values.add(Integer.toString(this.erfNumber));
         values.add(Integer.toString(this.address.id));
         values.add(Double.toString(this.totalPrice));
@@ -218,7 +218,7 @@ public class Project {
         //Add the Required Values
         values.add(String.format("'%s'", this.projectNumber));
         values.add(String.format("'%s'", this.name));
-        values.add(String.format("{%n%s%n}", this.building.toString()));
+        values.add(String.format("{%n%s%n}", this.buildingType.toString()));
         values.add(Integer.toString(this.erfNumber));
         values.add(String.format("{%n%s%n}", this.address.toString()));
         values.add(Double.toString(this.totalPrice));
@@ -244,36 +244,36 @@ public class Project {
      * @param databaseManager The Database Manager that will Handle all the database Interactions.
      * @return A Map Containing the Table's Properties as Keys and Filled Form Fields as the Corresponding Values.
      */
-    public HashMap<Project_Properties, Form_Field> getFilledFormFields(Database_Manager databaseManager) {
+    public HashMap<ProjectProperties, FormField> getFilledFormFields(DatabaseManager databaseManager) {
 
         //Get the List of Form Fields
-        HashMap<Project_Properties, Form_Field> formFields = getFormFields(databaseManager);
+        HashMap<ProjectProperties, FormField> formFields = getFormFields(databaseManager);
 
         //Get the Text Input Fields for the Properties
         JTextField projectNumberInputField =
-                ((JTextField) formFields.get(Project_Properties.Project_Number).fieldInput());
-        JTextField nameInputField = ((JTextField) formFields.get(Project_Properties.Name).fieldInput());
-        JTextField erfNumberInputField = ((JTextField) formFields.get(Project_Properties.ERF_Number).fieldInput());
-        JTextField totalPriceInputField = ((JTextField) formFields.get(Project_Properties.Total_Price).fieldInput());
-        JTextField totalPaidInputField = ((JTextField) formFields.get(Project_Properties.Total_Paid).fieldInput());
-        Date_Input deadlineInputField = ((Date_Input) formFields.get(Project_Properties.Deadline).fieldInput());
-        Date_Input startDateInputField = ((Date_Input) formFields.get(Project_Properties.Start_Date).fieldInput());
-        Date_Input completionDateInputField =
-                ((Date_Input) formFields.get(Project_Properties.Completion_Date).fieldInput());
+                ((JTextField) formFields.get(ProjectProperties.Project_Number).fieldInput());
+        JTextField nameInputField = ((JTextField) formFields.get(ProjectProperties.Name).fieldInput());
+        JTextField erfNumberInputField = ((JTextField) formFields.get(ProjectProperties.ERF_Number).fieldInput());
+        JTextField totalPriceInputField = ((JTextField) formFields.get(ProjectProperties.Total_Price).fieldInput());
+        JTextField totalPaidInputField = ((JTextField) formFields.get(ProjectProperties.Total_Paid).fieldInput());
+        DateInput deadlineInputField = ((DateInput) formFields.get(ProjectProperties.Deadline).fieldInput());
+        DateInput startDateInputField = ((DateInput) formFields.get(ProjectProperties.Start_Date).fieldInput());
+        DateInput completionDateInputField =
+                ((DateInput) formFields.get(ProjectProperties.Completion_Date).fieldInput());
 
         //Get the Select Box Input Fields for the Properties
-        JComboBox<Building> buildingTypeInputField =
-                (JComboBox<Building>) formFields.get(Project_Properties.Building_Type).fieldInput();
-        JComboBox<Project_Manager> projectManagersInputField =
-                (JComboBox<Project_Manager>) formFields.get(Project_Properties.Project_Manager).fieldInput();
-        JComboBox<Structural_Engineer> structuralEngineersInputField =
-                (JComboBox<Structural_Engineer>) formFields.get(Project_Properties.Structural_Engineer).fieldInput();
+        JComboBox<BuildingType> buildingTypeInputField =
+                (JComboBox<BuildingType>) formFields.get(ProjectProperties.Building_Type).fieldInput();
+        JComboBox<ProjectManager> projectManagersInputField =
+                (JComboBox<ProjectManager>) formFields.get(ProjectProperties.Project_Manager).fieldInput();
+        JComboBox<StructuralEngineer> structuralEngineersInputField =
+                (JComboBox<StructuralEngineer>) formFields.get(ProjectProperties.Structural_Engineer).fieldInput();
         JComboBox<Architect> architectsInputField =
-                (JComboBox<Architect>) formFields.get(Project_Properties.Architect).fieldInput();
+                (JComboBox<Architect>) formFields.get(ProjectProperties.Architect).fieldInput();
         JComboBox<Contractor> contractorsInputField =
-                (JComboBox<Contractor>) formFields.get(Project_Properties.Contractor).fieldInput();
+                (JComboBox<Contractor>) formFields.get(ProjectProperties.Contractor).fieldInput();
         JComboBox<Customer> customersInputField =
-                (JComboBox<Customer>) formFields.get(Project_Properties.Customer).fieldInput();
+                (JComboBox<Customer>) formFields.get(ProjectProperties.Customer).fieldInput();
 
         //Update the Text Input Fields
         projectNumberInputField.setText(this.projectNumber);
@@ -286,7 +286,7 @@ public class Project {
         completionDateInputField.setSelectedDate(this.completionDate);
 
         //Update the Select Box Input Fields
-        buildingTypeInputField.setSelectedItem(this.building);
+        buildingTypeInputField.setSelectedItem(this.buildingType);
         projectManagersInputField.setSelectedItem(this.projectManager);
         structuralEngineersInputField.setSelectedItem(this.structuralEngineer);
         architectsInputField.setSelectedItem(this.architect);
@@ -303,25 +303,25 @@ public class Project {
      * @param databaseManager The Database Manager that will Handle all the database Interactions.
      * @return A Map Containing the Table's Properties as Keys and Form Fields as the Corresponding Values.
      */
-    public static HashMap<Project_Properties, Form_Field> getFormFields(Database_Manager databaseManager) {
+    public static HashMap<ProjectProperties, FormField> getFormFields(DatabaseManager databaseManager) {
 
         //Setup the List of Form Fields
-        HashMap<Project_Properties, Form_Field> formFields = new HashMap<>();
+        HashMap<ProjectProperties, FormField> formFields = new HashMap<>();
 
         //Get the List of Properties
-        ArrayList<Project_Properties> propertyList = getProperties();
+        ArrayList<ProjectProperties> propertyList = getProperties();
 
         //Get the List of Required Select Boxes
-        HashMap<Project_Properties, JComboBox<?>> selectBoxList = getSelectBoxList(databaseManager);
+        HashMap<ProjectProperties, JComboBox<?>> selectBoxList = getSelectBoxList(databaseManager);
 
         //Setup the Date Properties
-        ArrayList<Project_Properties> dateProperties = new ArrayList<>();
-        dateProperties.add(Project_Properties.Deadline);
-        dateProperties.add(Project_Properties.Start_Date);
-        dateProperties.add(Project_Properties.Completion_Date);
+        ArrayList<ProjectProperties> dateProperties = new ArrayList<>();
+        dateProperties.add(ProjectProperties.Deadline);
+        dateProperties.add(ProjectProperties.Start_Date);
+        dateProperties.add(ProjectProperties.Completion_Date);
 
         //Loop through the Requested Properties
-        for (Project_Properties currentProperty : propertyList) {
+        for (ProjectProperties currentProperty : propertyList) {
 
             //Setup the Input Field's Label
             JLabel inputFieldLabel = new JLabel(currentProperty.name());
@@ -333,10 +333,10 @@ public class Project {
             if(selectBoxList.containsKey(currentProperty)) inputField = selectBoxList.get(currentProperty);
 
             //Check if the Current Property Should be a Date Input Field and update the Input Field
-            if(dateProperties.contains(currentProperty))inputField = new Date_Input();
+            if(dateProperties.contains(currentProperty))inputField = new DateInput();
 
             //Setup the New Form Field
-            Form_Field newFormField = new Form_Field(inputFieldLabel, inputField);
+            FormField newFormField = new FormField(inputFieldLabel, inputField);
 
             //Add the New Form Field to the Form Fields List
             formFields.put(currentProperty, newFormField);
@@ -352,26 +352,26 @@ public class Project {
      * @param databaseManager The Database Manager that will Handle all the database Interactions.
      * @return A Map Containing the Table's Properties as Keys and Select Boxes as the Corresponding Values.
      */
-    public static HashMap<Project_Properties, JComboBox<?>> getSelectBoxList(Database_Manager databaseManager) {
+    public static HashMap<ProjectProperties, JComboBox<?>> getSelectBoxList(DatabaseManager databaseManager) {
 
         //Setup the Select Box List
-        HashMap<Project_Properties, JComboBox<?>> selectBoxList = new HashMap<>();
+        HashMap<ProjectProperties, JComboBox<?>> selectBoxList = new HashMap<>();
 
 //Get the List of Addresses
         Address[] addressList =
                 databaseManager.addressesTable.getAll().toArray(Address[]::new);
 
-        //Get the List of Buildings
-        Building[] buildingList =
-                databaseManager.buildingsTable.getAll().toArray(Building[]::new);
+        //Get the List of Building Types
+        BuildingType[] buildingTypeList =
+                databaseManager.buildingsTable.getAll().toArray(BuildingType[]::new);
 
         //Get the List of Project Managers
-        Project_Manager[] projectManagerList =
-                databaseManager.projectManagersTable.getAll().toArray(Project_Manager[]::new);
+        ProjectManager[] projectManagerList =
+                databaseManager.projectManagersTable.getAll().toArray(ProjectManager[]::new);
 
         //Get the List of Structural Engineers
-        Structural_Engineer[] structuralEngineerList =
-                databaseManager.structuralEngineersTable.getAll().toArray(Structural_Engineer[]::new);
+        StructuralEngineer[] structuralEngineerList =
+                databaseManager.structuralEngineersTable.getAll().toArray(StructuralEngineer[]::new);
 
         //Get the List of Customers
         Customer[] customerList =
@@ -387,21 +387,21 @@ public class Project {
 
         //Setup the Required Select Boxes Select Box
         JComboBox<Address> addressSelectBox = new JComboBox<>(addressList);
-        JComboBox<Building> buildingSelectBox = new JComboBox<>(buildingList);
-        JComboBox<Project_Manager> projectManagerSelectBox = new JComboBox<>(projectManagerList);
-        JComboBox<Structural_Engineer> structuralEngineerSelectBox = new JComboBox<>(structuralEngineerList);
+        JComboBox<BuildingType> buildingSelectBox = new JComboBox<>(buildingTypeList);
+        JComboBox<ProjectManager> projectManagerSelectBox = new JComboBox<>(projectManagerList);
+        JComboBox<StructuralEngineer> structuralEngineerSelectBox = new JComboBox<>(structuralEngineerList);
         JComboBox<Customer> customerSelectBox = new JComboBox<>(customerList);
         JComboBox<Contractor> contractorSelectBox = new JComboBox<>(contractorList);
         JComboBox<Architect> architectSelectBox = new JComboBox<>(architectList);
 
         //Add the Items to the Required Items List
-        selectBoxList.put(Project_Properties.Address, addressSelectBox);
-        selectBoxList.put(Project_Properties.Building_Type, buildingSelectBox);
-        selectBoxList.put(Project_Properties.Project_Manager, projectManagerSelectBox);
-        selectBoxList.put(Project_Properties.Structural_Engineer, structuralEngineerSelectBox);
-        selectBoxList.put(Project_Properties.Architect, architectSelectBox);
-        selectBoxList.put(Project_Properties.Contractor, contractorSelectBox);
-        selectBoxList.put(Project_Properties.Customer, customerSelectBox);
+        selectBoxList.put(ProjectProperties.Address, addressSelectBox);
+        selectBoxList.put(ProjectProperties.Building_Type, buildingSelectBox);
+        selectBoxList.put(ProjectProperties.Project_Manager, projectManagerSelectBox);
+        selectBoxList.put(ProjectProperties.Structural_Engineer, structuralEngineerSelectBox);
+        selectBoxList.put(ProjectProperties.Architect, architectSelectBox);
+        selectBoxList.put(ProjectProperties.Contractor, contractorSelectBox);
+        selectBoxList.put(ProjectProperties.Customer, customerSelectBox);
 
         //Return the Required Items List
         return selectBoxList;

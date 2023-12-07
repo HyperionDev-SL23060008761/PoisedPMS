@@ -16,7 +16,7 @@ public class Customer extends Role {
      * @param id              The ID for the item in the Database (Null if a Blank Object is Needed).
      * @param personalDetails The Personal Details for the Customer.
      */
-    public Customer(Integer id, Personal_Details personalDetails){
+    public Customer(Integer id, PersonalDetails personalDetails){
 
         //Construct the Parent Class
         super(id, personalDetails);

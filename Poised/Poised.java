@@ -3,8 +3,8 @@ package Poised;
 
 //Imports
 import Poised.Classes.*;
-import Poised.Utils.Database.Database_Manager;
-import Poised.Utils.Dialogue.Dialogue_Manager;
+import Poised.Utils.Database.DatabaseManager;
+import Poised.Utils.Dialogue.DialogueManager;
 
 /**
  * The Main Class for the Project, Responsible for Initializing and Building the Required Components.
@@ -19,10 +19,10 @@ class Poised {
     public static void main(String[] args) {
 
         //Setup the Dialogue Manager
-        Dialogue_Manager dialogueManager = new Dialogue_Manager();
+        DialogueManager dialogueManager = new DialogueManager();
 
         //Setup the New Database Manager
-        Database_Manager databaseManager = new Database_Manager(
+        DatabaseManager databaseManager = new DatabaseManager(
                 "localhost:3306",
                 "Poised",
                 "poised",
@@ -46,36 +46,36 @@ class Poised {
             System.exit(0);
         }
 
-        //Setup the Buildings Manager
-        Buildings_Manager buildingsManager = new Buildings_Manager(databaseManager, dialogueManager);
+        //Setup the Building Types Manager
+        BuildingsManager buildingsManager = new BuildingsManager(databaseManager, dialogueManager);
 
         //Setup the Addresses Manager
-        Addresses_Manager addressesManager = new Addresses_Manager(databaseManager, dialogueManager);
+        AddressesManager addressesManager = new AddressesManager(databaseManager, dialogueManager);
 
         //Setup the Personal Details Manager
-        Personal_Details_Manager personalDetailsManager =
-                new Personal_Details_Manager(databaseManager, dialogueManager);
+        PersonalDetailsManager personalDetailsManager =
+                new PersonalDetailsManager(databaseManager, dialogueManager);
 
         //Setup the Architects Manager
-        Architects_Manager architectsManager = new Architects_Manager(databaseManager, dialogueManager);
+        ArchitectsManager architectsManager = new ArchitectsManager(databaseManager, dialogueManager);
 
         //Setup the Contractors Manager
-        Contractors_Manager contractorsManager = new Contractors_Manager(databaseManager, dialogueManager);
+        ContractorsManager contractorsManager = new ContractorsManager(databaseManager, dialogueManager);
 
         //Setup the Customers Manager
-        Customers_Manager customersManager = new Customers_Manager(databaseManager, dialogueManager);
+        CustomersManager customersManager = new CustomersManager(databaseManager, dialogueManager);
 
         //Setup the Project Managers Manager
-        Project_Managers_Manager projectManagersManager =
-                new Project_Managers_Manager(databaseManager, dialogueManager);
+        ProjectManagersManager projectManagersManager =
+                new ProjectManagersManager(databaseManager, dialogueManager);
 
         //Setup the Structural Engineers Manager
-        Structural_Engineers_Manager structuralEngineersManager =
-                new Structural_Engineers_Manager(databaseManager, dialogueManager);
+        StructuralEngineersManager structuralEngineersManager =
+                new StructuralEngineersManager(databaseManager, dialogueManager);
 
         //Setup the Projects Manager
-        Projects_Manager projectsManager =
-                new Projects_Manager(databaseManager, dialogueManager);
+        ProjectsManager projectsManager =
+                new ProjectsManager(databaseManager, dialogueManager);
 
         //Show the Main Menu
         dialogueManager.mainMenu.open(

@@ -29,7 +29,7 @@ You only need to Fork the Project, make the Desired Changes and Submit a Pull Re
 
 ## Screenshots
 
-![Database Structure](./Screenshots/PoisePMS_Diagram.png)
+![Database Structure](./Screenshots/PoisePMS_Diagram_Color_Coded.png)
 
 ![Main Menu](./Screenshots/Main_Menu.png)
 

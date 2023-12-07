@@ -67,13 +67,13 @@ CREATE TABLE Addresses (
 );
 
 --This will hold the Type of the Buildings (Apartment, House, Store, etc...)
-CREATE TABLE Buildings (
+CREATE TABLE Building_Types (
   id int PRIMARY KEY AUTO_INCREMENT,
   Building_Type varchar(255) NOT NULL
 );
 
 --Project References
-ALTER TABLE Projects ADD FOREIGN KEY (Building_Type) REFERENCES Buildings (id);
+ALTER TABLE Projects ADD FOREIGN KEY (Building_Type) REFERENCES Building_Types (id);
 ALTER TABLE Projects ADD FOREIGN KEY (Address) REFERENCES Addresses (id);
 ALTER TABLE Projects ADD FOREIGN KEY (Project_Manager) REFERENCES Project_Managers (id);
 ALTER TABLE Projects ADD FOREIGN KEY (Structural_Engineer) REFERENCES Structural_Engineers (id);

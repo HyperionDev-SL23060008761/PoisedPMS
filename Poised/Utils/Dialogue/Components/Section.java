@@ -2,7 +2,7 @@
 package Poised.Utils.Dialogue.Components;
 
 //Import
-import Poised.Utils.Dialogue.Dialogue_Manager;
+import Poised.Utils.Dialogue.DialogueManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,9 +14,9 @@ import java.util.ArrayList;
 public class Section {
 
     //Setup the Private Properties
-    private final Dialogue_Manager dialogueManager;
+    private final DialogueManager dialogueManager;
     private final String sectionTitle;
-    private final ArrayList<Dialogue_Button> buttons;
+    private final ArrayList<DialogueButton> buttons;
 
     /**
      * Constructor for Section.
@@ -25,7 +25,7 @@ public class Section {
      * @param sectionTitle The Title for the Section Component
      * @param sectionButtons The List of Buttons to be Added to the Section.
      */
-    public Section(Dialogue_Manager dialogueManager, String sectionTitle, ArrayList<Dialogue_Button> sectionButtons) {
+    public Section(DialogueManager dialogueManager, String sectionTitle, ArrayList<DialogueButton> sectionButtons) {
 
         //Update the Private Properties
         this.dialogueManager = dialogueManager;
@@ -58,7 +58,7 @@ public class Section {
         //Setup the Dialogue Options List
         ArrayList<Button> dialogueOptions = new ArrayList<>();
 
-        for (Dialogue_Button dialogueButton : this.buttons) {
+        for (DialogueButton dialogueButton : this.buttons) {
 
             //Create the New Button
             Button newButton = new Button(dialogueButton.buttonName());
